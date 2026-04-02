@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>HSP · Arrocería y Catering</title>
 <meta name="description" content="Arroces artesanales a domicilio para eventos. Paellas, arroces de mar y tierra. Catering en Valencia y alrededores. Mínimo 8 personas.">
 <meta property="og:title" content="HSP · Arrocería & Catering">
@@ -16,6 +16,8 @@
 ╔══════════════════════════════════════════════════════════════╗
 ║  HSP — ARROCERÍA & CATERING — CARTA / MENÚ                  ║
 ║                                                              ║
+║  MOBILE-FIRST (90%+ tráfico móvil)                          ║
+║                                                              ║
 ║  EDITADO POR IA — GUÍA DE ESTRUCTURA                        ║
 ║                                                              ║
 ║  1. CONFIGURACIÓN ......... <script id="site-config">        ║
@@ -23,12 +25,22 @@
 ║     → Carta completa (secciones + platos) en JSON            ║
 ║                                                              ║
 ║  2. ESTILOS ............... <style>                           ║
+║     → Mobile-first: base = móvil, @media (min-width) = desk  ║
 ║     → Paleta de colores (variables CSS)                      ║
-║     → Layout, tipografía, animaciones                        ║
 ║                                                              ║
 ║  3. ESTRUCTURA HTML ....... <body>                            ║
 ║     → Se renderiza automáticamente desde CONFIG               ║
 ║     → NO editar el HTML de platos manualmente                ║
+║                                                              ║
+║  DECISIONES MOBILE-FIRST:                                    ║
+║  · Header compacto — el menú se ve sin scroll excesivo       ║
+║  · Sin animaciones de entrada (evita "parpadeo" en móvil)    ║
+║  · Sin hover effects (no existen en táctil)                  ║
+║  · Touch targets mínimo 44px (accesibilidad Apple/Google)    ║
+║  · Fuentes mínimo ~14px equiv para legibilidad               ║
+║  · Letter-spacing reducido en móvil (ahorra espacio)         ║
+║  · CTA WhatsApp sticky siempre visible                       ║
+║  · Octopus SVG oculto en pantallas < 600px                   ║
 ║                                                              ║
 ║  REGLAS DE NEGOCIO:                                          ║
 ║  · Mínimo 8 personas por encargo                             ║
@@ -54,7 +66,7 @@ const CONFIG = {
   },
   contacts: [
     { name: "Hugo",   phone: "34609636086", display: "609 636 086" },
-    { name: "Álvaro", phone: "34606962046", display: "606 962 046" },
+    { name: "Álvaro Méndez", phone: "34606962046", display: "606 962 046" },
   ],
   instagram: {
     handle: "@eventos_hsp",
@@ -150,7 +162,7 @@ const ALLERGEN_ICONS = {
 </script>
 
 <!-- ═══════════════════════════════════════════ -->
-<!-- 2. ESTILOS                                 -->
+<!-- 2. ESTILOS — MOBILE-FIRST                  -->
 <!-- ═══════════════════════════════════════════ -->
 <style>
   /* ── PALETA ── */
@@ -168,96 +180,72 @@ const ALLERGEN_ICONS = {
   /* ── RESET ── */
   * { margin:0; padding:0; box-sizing:border-box }
 
-  /* ── BASE ── */
+  /* ── BASE (MOBILE) ── */
   body {
     background: var(--bg-deep);
     color: var(--text);
     font-family: 'Raleway', sans-serif;
     min-height: 100vh;
     overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    /* Prevent tap highlight on iOS */
+    -webkit-tap-highlight-color: transparent;
   }
 
   /* ── NOISE OVERLAY ── */
   body::after {
     content: '';
-    position: fixed;
-    inset: 0;
-    opacity: .03;
+    position: fixed; inset: 0; opacity: .03;
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-    background-size: 200px;
-    pointer-events: none;
-    z-index: 9999;
+    background-size: 200px; pointer-events: none; z-index: 9999;
   }
 
-  /* ── AMBIENT GLOWS ── */
-  .ambient { position: fixed; inset: 0; pointer-events: none; z-index: 0 }
-  .ambient .g1 {
-    position: absolute; width: 600px; height: 600px; top: -10%; right: -8%;
-    background: radial-gradient(circle, rgba(196,167,108,.06) 0%, transparent 70%);
-    animation: d1 18s ease-in-out infinite;
-  }
-  .ambient .g2 {
-    position: absolute; width: 500px; height: 500px; bottom: 10%; left: -5%;
-    background: radial-gradient(circle, rgba(30,60,120,.12) 0%, transparent 70%);
-    animation: d2 22s ease-in-out infinite;
-  }
-  .ambient .g3 {
-    position: absolute; width: 400px; height: 400px; top: 40%; left: 30%;
-    background: radial-gradient(circle, rgba(196,167,108,.03) 0%, transparent 70%);
-    animation: d3 15s ease-in-out infinite;
-  }
-  @keyframes d1 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(-30px,40px)} }
-  @keyframes d2 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(20px,-30px)} }
-  @keyframes d3 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(-20px,-20px)} }
+  /* ── AMBIENT GLOWS (solo desktop, ahorra GPU en móvil) ── */
+  .ambient { display: none }
 
-  /* ── HERO LAYOUT ── */
+  /* ── HEADER — compacto en móvil ── */
   .hero {
-    position: relative; min-height: 100vh;
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    text-align: center; padding: 3rem 2rem; z-index: 1;
+    position: relative; z-index: 1;
+    display: flex; flex-direction: column; align-items: center;
+    text-align: center;
+    padding: 2.5rem 1.2rem 1rem;
   }
 
-  /* ── OCTOPUS BG ── */
-  .octopus-bg {
-    position: absolute; bottom: -6%; right: -2%; width: 46%;
-    opacity: .045; pointer-events: none;
-  }
-  .octopus-bg svg { width: 100%; height: auto }
+  /* ── OCTOPUS — oculto en móvil ── */
+  .octopus-bg { display: none }
 
   /* ── BRAND ── */
-  .brand { position: relative; z-index: 1; margin-bottom: .5rem; animation: fadeUp 1.2s ease-out both }
+  .brand { margin-bottom: .3rem }
   .brand h1 {
     font-family: 'Playfair Display', serif;
-    font-size: clamp(3.5rem, 10vw, 6rem); font-weight: 500;
-    letter-spacing: .22em; color: var(--cream);
-    text-shadow: 0 0 80px rgba(200,170,120,.1); line-height: 1;
+    font-size: 3.2rem; font-weight: 500;
+    letter-spacing: .18em; color: var(--cream);
+    line-height: 1;
   }
   .brand .subtitle {
     font-family: 'Cormorant Garamond', serif; font-style: italic; font-weight: 300;
-    font-size: clamp(.95rem, 2.5vw, 1.2rem); letter-spacing: .32em;
-    color: var(--muted); margin-top: .6rem;
-    opacity: 0; animation: fadeUp .8s ease-out .4s forwards;
+    font-size: 1rem; letter-spacing: .2em;
+    color: var(--muted); margin-top: .4rem;
   }
 
   /* ── DIVIDER ── */
   .divider-wrap {
-    display: flex; align-items: center; justify-content: center; gap: 1rem;
-    margin: 2.2rem auto 2.5rem;
-    opacity: 0; animation: fadeUp .6s ease-out .6s forwards;
+    display: flex; align-items: center; justify-content: center; gap: .8rem;
+    margin: 1.2rem auto 1.5rem;
   }
-  .divider-line { width: 60px; height: 1px; background: linear-gradient(90deg, transparent, rgba(196,167,108,.4), transparent) }
-  .divider-diamond { width: 6px; height: 6px; border: 1px solid rgba(196,167,108,.4); transform: rotate(45deg) }
+  .divider-line { width: 40px; height: 1px; background: linear-gradient(90deg, transparent, rgba(196,167,108,.4), transparent) }
+  .divider-diamond { width: 5px; height: 5px; border: 1px solid rgba(196,167,108,.4); transform: rotate(45deg) }
 
   /* ── MENÚ CONTENEDOR ── */
-  .menu { position: relative; z-index: 1; max-width: 660px; width: 100%; padding: 0 1.5rem }
+  .menu { position: relative; z-index: 1; max-width: 660px; width: 100%; padding: 0 1rem }
 
   /* ── SECCIONES ── */
-  .section { margin-bottom: 3rem }
-  .section:last-child { margin-bottom: 1rem }
+  .section { margin-bottom: 2rem }
+  .section:last-child { margin-bottom: .8rem }
   .section-title {
-    font-family: 'Cormorant Garamond', serif; font-size: 1.05rem; font-weight: 400;
-    letter-spacing: .4em; text-transform: uppercase; color: var(--gold);
-    margin-bottom: 1.6rem; display: flex; align-items: center; gap: 1.2rem;
+    font-family: 'Cormorant Garamond', serif; font-size: .95rem; font-weight: 400;
+    letter-spacing: .25em; text-transform: uppercase; color: var(--gold);
+    margin-bottom: 1rem; display: flex; align-items: center; gap: .8rem;
   }
   .section-title::before, .section-title::after {
     content: ''; flex: 1; height: 1px;
@@ -266,40 +254,44 @@ const ALLERGEN_ICONS = {
 
   /* ── PLATOS ── */
   .dish {
-    padding: .85rem 0; display: flex; justify-content: space-between;
-    align-items: flex-start; gap: 1rem; text-align: left;
-    position: relative; transition: all .35s ease;
+    /* Área táctil mínima 44px — padding generoso */
+    padding: .9rem 0;
+    display: flex; justify-content: space-between;
+    align-items: flex-start; gap: .8rem; text-align: left;
+    position: relative;
+    /* Active state en vez de hover para táctil */
+    transition: background .15s;
+    margin: 0 -.5rem; padding-left: .5rem; padding-right: .5rem;
+    border-radius: 4px;
   }
+  .dish:active { background: rgba(196,167,108,.04) }
   .dish::after {
-    content: ''; position: absolute; bottom: 0; left: 5%; right: 5%; height: 1px;
+    content: ''; position: absolute; bottom: 0; left: 3%; right: 3%; height: 1px;
     background: linear-gradient(90deg, transparent, rgba(196,167,108,.08), transparent);
   }
   .dish:last-child::after { display: none }
-  .dish:hover { transform: translateX(4px) }
-  .dish:hover .dish-name { color: var(--cream) }
 
   .dish-name {
-    font-size: .9rem; letter-spacing: .05em; font-weight: 400;
-    color: var(--text); line-height: 1.6; transition: color .35s;
+    font-size: .92rem; letter-spacing: .03em; font-weight: 400;
+    color: var(--text); line-height: 1.5;
   }
   .dish-desc {
     display: block; font-family: 'Cormorant Garamond', serif;
     font-style: italic; font-weight: 300; color: var(--muted);
-    font-size: .85rem; margin-top: .15rem; letter-spacing: .02em;
+    font-size: .88rem; margin-top: .2rem; letter-spacing: .01em;
+    line-height: 1.4;
   }
   .dish-allergens {
-    display: inline-flex; gap: .25rem; margin-left: .4rem;
-    font-size: .7rem; vertical-align: middle; cursor: default;
+    display: inline-flex; gap: .3rem; margin-left: .4rem;
+    font-size: .8rem; vertical-align: middle;
   }
-  .dish-allergens span { opacity: .7; transition: opacity .2s }
-  .dish-allergens span:hover { opacity: 1 }
 
-  /* ── BADGES ── */
+  /* ── BADGES — legibles en móvil ── */
   .badge {
     display: inline-flex; align-items: center;
-    font-family: 'Raleway', sans-serif; font-size: .58rem;
-    letter-spacing: .18em; text-transform: uppercase;
-    padding: 3px 10px; border-radius: 1px; margin-left: .6rem;
+    font-family: 'Raleway', sans-serif; font-size: .6rem;
+    letter-spacing: .12em; text-transform: uppercase;
+    padding: 3px 8px; border-radius: 2px; margin-left: .5rem;
     vertical-align: middle; font-weight: 600;
   }
   .badge.esp {
@@ -311,96 +303,173 @@ const ALLERGEN_ICONS = {
     border: 1px solid rgba(120,180,160,.2);
   }
 
+  /* ── LEYENDA ALÉRGENOS ── */
   .allergen-legend {
-    display: flex; align-items: center; justify-content: center; gap: .5rem;
-    font-family: 'Cormorant Garamond', serif; font-size: .82rem;
-    color: var(--muted); letter-spacing: .03em; font-weight: 300;
-    margin-bottom: 1.8rem; opacity: .6;
+    display: flex; align-items: center; justify-content: center; gap: .4rem;
+    font-family: 'Cormorant Garamond', serif; font-size: .85rem;
+    color: var(--muted); letter-spacing: .02em; font-weight: 300;
+    margin-bottom: 1.5rem; opacity: .6;
   }
 
   /* ── FOOTER ── */
   footer {
     position: relative; z-index: 1; text-align: center;
-    padding: 1rem 1.5rem 4rem; max-width: 600px; margin: 0 auto;
+    padding: .8rem 1.2rem 6rem; /* 6rem bottom = espacio para CTA flotante */
+    max-width: 600px; margin: 0 auto;
   }
-  .footer-divider { width: 40px; height: 1px; background: rgba(196,167,108,.25); margin: 0 auto 2rem }
+  .footer-divider { width: 40px; height: 1px; background: rgba(196,167,108,.25); margin: 0 auto 1.5rem }
 
   .info-grid {
-    display: flex; flex-wrap: wrap; justify-content: center; gap: .6rem 1.4rem; margin-bottom: 2rem;
+    display: flex; flex-direction: column; align-items: center;
+    gap: .5rem; margin-bottom: 1.5rem;
   }
   .info-item {
     display: flex; align-items: center; gap: .5rem;
     font-family: 'Cormorant Garamond', serif; font-size: 1rem;
-    color: var(--muted); letter-spacing: .04em; font-weight: 300;
+    color: var(--muted); letter-spacing: .03em; font-weight: 300;
   }
   .info-item svg { opacity: .5; flex-shrink: 0 }
 
   .price-label {
     font-family: 'Cormorant Garamond', serif; font-size: .92rem;
-    letter-spacing: .35em; text-transform: uppercase;
-    color: var(--gold); opacity: .7; margin-top: 2rem; margin-bottom: .2rem;
+    letter-spacing: .25em; text-transform: uppercase;
+    color: var(--gold); opacity: .7; margin-top: 1.5rem; margin-bottom: .2rem;
   }
 
-  /* ── CONTACT BUTTONS ── */
-  .contact { margin-top: 2rem; display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem }
+  /* ── CONTACT BUTTONS — touch-friendly 44px+ height ── */
+  .contact { margin-top: 1.2rem; display: flex; flex-direction: column; align-items: center; gap: .8rem }
   .contact a {
-    display: inline-flex; align-items: center; gap: .5rem;
-    background: transparent; border: 1px solid rgba(196,167,108,.18);
-    color: var(--gold); padding: .7rem 1.6rem; border-radius: 2px;
-    text-decoration: none; font-size: .78rem; letter-spacing: .1em;
-    transition: all .4s cubic-bezier(.25,.46,.45,.94);
-    position: relative; overflow: hidden;
+    display: flex; align-items: center; justify-content: center; gap: .5rem;
+    background: transparent; border: 1px solid rgba(196,167,108,.22);
+    color: var(--gold); padding: .85rem 1.6rem; border-radius: 4px;
+    text-decoration: none; font-size: .82rem; letter-spacing: .08em;
+    width: 100%; max-width: 280px;
+    min-height: 48px; /* Touch target */
+    transition: background .15s;
   }
-  .contact a::before {
-    content: ''; position: absolute; inset: 0;
-    background: rgba(196,167,108,.06); transform: scaleX(0);
-    transform-origin: left; transition: transform .4s cubic-bezier(.25,.46,.45,.94);
-  }
-  .contact a:hover::before { transform: scaleX(1) }
-  .contact a:hover {
-    border-color: rgba(196,167,108,.4); transform: translateY(-1px);
-    box-shadow: 0 4px 20px rgba(196,167,108,.08);
-  }
-  .contact a span { position: relative; z-index: 1 }
+  .contact a:active { background: rgba(196,167,108,.08) }
 
-  .ig { margin-top: 1.8rem }
+  .ig { margin-top: 1.5rem }
   .ig a {
-    color: var(--muted); text-decoration: none; font-size: .75rem;
-    letter-spacing: .15em; transition: all .4s;
-    display: inline-flex; align-items: center; gap: .5rem;
+    color: var(--muted); text-decoration: none; font-size: .8rem;
+    letter-spacing: .1em; display: inline-flex; align-items: center; gap: .5rem;
+    min-height: 44px; /* Touch target */
   }
-  .ig a:hover { color: var(--gold-light); letter-spacing: .18em }
+  .ig a:active { color: var(--gold-light) }
 
-  /* ── FLOATING CTA ── */
+  /* ── FLOATING CTA — paella pan con whatsapp ── */
   .float-cta {
-    position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 100;
-    background: #25d366; color: #fff; border: none; border-radius: 50%;
-    width: 56px; height: 56px; display: flex; align-items: center; justify-content: center;
-    box-shadow: 0 4px 20px rgba(37,211,102,.35);
-    cursor: pointer; transition: transform .3s, box-shadow .3s;
-    text-decoration: none;
+    position: fixed; bottom: 1.2rem; right: 1.2rem; z-index: 100;
+    width: 72px; height: 72px;
+    display: flex; align-items: center; justify-content: center;
+    text-decoration: none; border: none; background: none;
+    bottom: calc(1.2rem + env(safe-area-inset-bottom, 0px));
+    filter: drop-shadow(0 4px 12px rgba(0,0,0,.35));
   }
-  .float-cta:hover { transform: scale(1.1); box-shadow: 0 6px 28px rgba(37,211,102,.5) }
+  .float-cta:active { transform: scale(.93) }
+  .float-cta .paella-svg { width: 100%; height: 100%; transform: rotate(-45deg) }
+  /* Steam wisps */
+  .float-cta .steam {
+    position: absolute; top: 2px; width: 2px; height: 10px;
+    background: rgba(255,255,255,.2); border-radius: 2px;
+    animation: steam 2.5s ease-in-out infinite;
+  }
+  .float-cta .steam:nth-child(1) { left: 32px; top: -2px; animation-delay: 0s }
+  .float-cta .steam:nth-child(2) { left: 44px; top: 0px; animation-delay: .7s }
+  .float-cta .steam:nth-child(3) { left: 56px; top: 4px; animation-delay: 1.4s }
+  @keyframes steam {
+    0% { opacity: 0; transform: translateY(0) scaleY(.5) }
+    40% { opacity: .5 }
+    100% { opacity: 0; transform: translateY(-14px) scaleY(1.3) }
+  }
 
   /* ── WAVE ── */
   .wave-wrap {
-    position: fixed; bottom: 0; left: 0; width: 100%; height: 100px;
-    pointer-events: none; z-index: 0; opacity: .05;
+    position: fixed; bottom: 0; left: 0; width: 100%; height: 60px;
+    pointer-events: none; z-index: 0; opacity: .04;
   }
 
-  /* ── ANIMATIONS ── */
-  @keyframes fadeUp { from { opacity:0; transform:translateY(20px) } to { opacity:1; transform:translateY(0) } }
-  .fade-in { opacity: 0; transform: translateY(20px); transition: opacity .6s ease, transform .6s ease }
-  .fade-in.visible { opacity: 1; transform: translateY(0) }
+  /* ═══════════════════════════════════════════ */
+  /* DESKTOP ENHANCEMENTS (min-width: 600px)    */
+  /* ═══════════════════════════════════════════ */
+  @media (min-width: 600px) {
+    /* Ambient glows — solo en desktop */
+    .ambient { display: block; position: fixed; inset: 0; pointer-events: none; z-index: 0 }
+    .ambient .g1 {
+      position: absolute; width: 600px; height: 600px; top: -10%; right: -8%;
+      background: radial-gradient(circle, rgba(196,167,108,.06) 0%, transparent 70%);
+      animation: d1 18s ease-in-out infinite;
+    }
+    .ambient .g2 {
+      position: absolute; width: 500px; height: 500px; bottom: 10%; left: -5%;
+      background: radial-gradient(circle, rgba(30,60,120,.12) 0%, transparent 70%);
+      animation: d2 22s ease-in-out infinite;
+    }
+    .ambient .g3 {
+      position: absolute; width: 400px; height: 400px; top: 40%; left: 30%;
+      background: radial-gradient(circle, rgba(196,167,108,.03) 0%, transparent 70%);
+      animation: d3 15s ease-in-out infinite;
+    }
+    @keyframes d1 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(-30px,40px)} }
+    @keyframes d2 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(20px,-30px)} }
+    @keyframes d3 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(-20px,-20px)} }
 
-  /* ── RESPONSIVE ── */
-  @media (max-width: 500px) {
-    .hero { padding: 2.5rem 1.2rem }
-    .menu { padding: 0 1rem }
-    .contact { flex-direction: column; align-items: center }
-    .contact a { width: 100%; max-width: 260px; justify-content: center }
-    .octopus-bg { width: 65%; bottom: -4%; right: -6% }
-    .float-cta { bottom: 1rem; right: 1rem; width: 50px; height: 50px }
+    /* Octopus — visible en desktop */
+    .octopus-bg {
+      display: block; position: absolute; bottom: -6%; right: -2%; width: 46%;
+      opacity: .045; pointer-events: none;
+    }
+    .octopus-bg svg { width: 100%; height: auto }
+
+    /* Hero más espacioso */
+    .hero {
+      min-height: 100vh; justify-content: center;
+      padding: 3rem 2rem;
+    }
+
+    /* Brand más grande */
+    .brand h1 { font-size: clamp(3.5rem, 10vw, 6rem); letter-spacing: .22em }
+    .brand .subtitle { font-size: 1.15rem; letter-spacing: .32em }
+
+    /* Divider más ancho */
+    .divider-wrap { margin: 2rem auto 2.5rem }
+    .divider-line { width: 60px }
+
+    /* Menu */
+    .menu { padding: 0 1.5rem }
+    .section { margin-bottom: 3rem }
+    .section:last-child { margin-bottom: 1rem }
+    .section-title { font-size: 1.05rem; letter-spacing: .4em; margin-bottom: 1.4rem }
+
+    /* Hover effects — solo desktop */
+    .dish { margin: 0; padding-left: 0; padding-right: 0; border-radius: 0 }
+    .dish:hover { transform: translateX(4px) }
+    .dish:hover .dish-name { color: var(--cream) }
+
+    /* Footer layout horizontal */
+    .info-grid { flex-direction: row; flex-wrap: wrap; gap: .6rem 1.4rem }
+    .contact { flex-direction: row; gap: 1rem }
+    .contact a { width: auto; max-width: none }
+
+    /* Hover en botones */
+    .contact a {
+      position: relative; overflow: hidden;
+      transition: all .4s cubic-bezier(.25,.46,.45,.94);
+    }
+    .contact a::before {
+      content: ''; position: absolute; inset: 0;
+      background: rgba(196,167,108,.06); transform: scaleX(0);
+      transform-origin: left; transition: transform .4s cubic-bezier(.25,.46,.45,.94);
+    }
+    .contact a:hover::before { transform: scaleX(1) }
+    .contact a:hover {
+      border-color: rgba(196,167,108,.4); transform: translateY(-1px);
+      box-shadow: 0 4px 20px rgba(196,167,108,.08);
+    }
+    .ig a:hover { color: var(--gold-light); letter-spacing: .14em }
+
+    footer { padding-bottom: 4rem }
+    .wave-wrap { height: 100px; opacity: .05 }
   }
 </style>
 </head>
@@ -410,7 +479,7 @@ const ALLERGEN_ICONS = {
 <!-- 3. ESTRUCTURA HTML                         -->
 <!-- ═══════════════════════════════════════════ -->
 
-<!-- Ambient glows (decorative) -->
+<!-- Ambient glows (decorative, desktop only) -->
 <div class="ambient" aria-hidden="true">
   <div class="g1"></div>
   <div class="g2"></div>
@@ -418,7 +487,7 @@ const ALLERGEN_ICONS = {
 </div>
 
 <main class="hero">
-  <!-- Octopus illustration (decorative) -->
+  <!-- Octopus illustration (decorative, desktop only) -->
   <div class="octopus-bg" aria-hidden="true">
     <svg viewBox="0 0 500 600" fill="none" xmlns="http://www.w3.org/2000/svg">
       <g stroke="#c4a76c" stroke-width="1.2" fill="none">
@@ -445,7 +514,7 @@ const ALLERGEN_ICONS = {
     </svg>
   </div>
 
-  <!-- Brand — rendered from CONFIG -->
+  <!-- Brand -->
   <header class="brand" role="banner">
     <h1 id="brand-name"></h1>
     <p class="subtitle" id="brand-subtitle"></p>
@@ -457,16 +526,40 @@ const ALLERGEN_ICONS = {
     <div class="divider-line"></div>
   </div>
 
-  <!-- Menu — rendered dynamically from CONFIG.carta -->
+  <!-- Menu — rendered from CONFIG.carta -->
   <div class="menu" id="menu-container" role="list" aria-label="Carta de arroces"></div>
 </main>
 
-<!-- Footer — rendered from CONFIG -->
+<!-- Footer -->
 <footer id="footer-container"></footer>
 
 <!-- Floating WhatsApp CTA -->
 <a class="float-cta" id="float-cta" aria-label="Contactar por WhatsApp" target="_blank">
-  <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+  <span class="steam"></span>
+  <span class="steam"></span>
+  <span class="steam"></span>
+  <svg class="paella-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+    <!-- Pan handles (semicircle) -->
+    <path d="M8,40 A10,10 0 0,0 8,56" fill="none" stroke="#a08040" stroke-width="4" stroke-linecap="round"/>
+    <path d="M92,40 A10,10 0 0,1 92,56" fill="none" stroke="#a08040" stroke-width="4" stroke-linecap="round"/>
+    <!-- Pan outer rim -->
+    <circle cx="50" cy="50" r="42" fill="#5a4828" stroke="#70593a" stroke-width="1.5"/>
+    <!-- Inner rice area (green = WhatsApp brand) -->
+    <circle cx="50" cy="50" r="36" fill="#25d366"/>
+    <!-- Subtle rice texture dots -->
+    <circle cx="28" cy="36" r="1.2" fill="rgba(255,255,200,.25)"/>
+    <circle cx="72" cy="40" r="1" fill="rgba(255,255,200,.2)"/>
+    <circle cx="35" cy="68" r="1.1" fill="rgba(255,255,200,.2)"/>
+    <circle cx="66" cy="66" r="1.3" fill="rgba(255,255,200,.25)"/>
+    <circle cx="24" cy="52" r=".9" fill="rgba(255,255,200,.15)"/>
+    <circle cx="76" cy="55" r="1" fill="rgba(255,255,200,.18)"/>
+    <circle cx="40" cy="28" r="1" fill="rgba(255,255,200,.15)"/>
+    <circle cx="60" cy="73" r=".8" fill="rgba(255,255,200,.15)"/>
+    <!-- WhatsApp icon (centered, scaled) -->
+    <g transform="translate(50,50) rotate(45) scale(1.35) translate(-12,-12)">
+      <path fill="white" d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+    </g>
+  </svg>
 </a>
 
 <!-- Wave (decorative) -->
@@ -489,9 +582,9 @@ const ALLERGEN_ICONS = {
 
   /* Menu */
   const menuEl = document.getElementById('menu-container');
-  C.carta.forEach((sec, si) => {
+  C.carta.forEach(sec => {
     const sectionEl = document.createElement('div');
-    sectionEl.className = 'section fade-in';
+    sectionEl.className = 'section';
     sectionEl.setAttribute('role', 'listitem');
 
     let html = `<div class="section-title">${sec.section}</div>`;
@@ -550,14 +643,8 @@ const ALLERGEN_ICONS = {
       </a>
     </div>`;
 
-  /* Floating CTA → first contact */
-  document.getElementById('float-cta').href = `https://wa.me/${C.contacts[0].phone}`;
-
-  /* Scroll animations via IntersectionObserver */
-  const obs = new IntersectionObserver((entries) => {
-    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target) } });
-  }, { threshold: 0.15 });
-  document.querySelectorAll('.fade-in').forEach(el => obs.observe(el));
+  /* Floating CTA → Álvaro Méndez */
+  document.getElementById('float-cta').href = `https://wa.me/${C.contacts[1].phone}`;
 })();
 </script>
 
