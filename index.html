@@ -346,6 +346,8 @@ const ALLERGEN_ICONS = {
     color: var(--muted); letter-spacing: .03em; font-weight: 300;
   }
   .info-item svg { opacity: .5; flex-shrink: 0 }
+  .info-highlight { color: var(--gold); font-weight: 400 }
+  .info-highlight svg { opacity: .8 }
 
   /* ── CTA PEDIDO — touch-friendly ── */
   .order-cta {
@@ -615,21 +617,21 @@ const ALLERGEN_ICONS = {
     </div>
     <div class="footer-divider"></div>
     <div class="info-grid">
-      <div class="info-item">
+      <div class="info-item info-highlight">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+        Precios sin servicio: delivery +1\u20ac (seg\u00fan zona), showcooking +2\u20ac
+      </div>
+      <div class="info-item info-highlight">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
         Delivery a partir de ${C.info.minDelivery} comensales
       </div>
-      <div class="info-item">
+      <div class="info-item info-highlight">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
         Showcooking a partir de ${C.info.minShowcooking} comensales
       </div>
-      <div class="info-item">
+      <div class="info-item info-highlight">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
         ${C.info.reservaTexto}
-      </div>
-      <div class="info-item">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
-        Precios sin servicio: delivery +1\u20ac (seg\u00fan zona), showcooking +2\u20ac
       </div>
     </div>
     <div class="order-cta">
