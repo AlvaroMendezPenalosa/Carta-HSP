@@ -643,6 +643,23 @@ const ALLERGEN_ICONS = {
 
   /* Floating CTA */
   document.getElementById('float-cta').href = waUrl;
+
+  /* Keep float-cta visible on pinch-zoom (iOS) */
+  if (window.visualViewport) {
+    const cta = document.getElementById('float-cta');
+    function repositionCta() {
+      const vv = window.visualViewport;
+      cta.style.position = 'fixed';
+      cta.style.bottom = 'auto';
+      cta.style.right = 'auto';
+      cta.style.top = (vv.offsetTop + vv.height - 72 - 16) / vv.scale + 'px';
+      cta.style.left = (vv.offsetLeft + vv.width - 72 - 16) / vv.scale + 'px';
+      cta.style.transform = 'scale(' + (1 / vv.scale) + ')';
+      cta.style.transformOrigin = 'bottom right';
+    }
+    visualViewport.addEventListener('resize', repositionCta);
+    visualViewport.addEventListener('scroll', repositionCta);
+  }
 })();
 </script>
 
