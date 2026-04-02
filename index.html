@@ -647,12 +647,17 @@ const ALLERGEN_ICONS = {
   /* Keep float-cta visible on pinch-zoom (iOS) */
   if (window.visualViewport) {
     const cta = document.getElementById('float-cta');
+    var size = 72, margin = 16;
     function repositionCta() {
-      const vv = window.visualViewport;
+      var vv = window.visualViewport;
+      var s = 1 / vv.scale;
+      var realSize = size * s;
       cta.style.bottom = 'auto';
       cta.style.right = 'auto';
-      cta.style.top = (vv.offsetTop + vv.height - 72 - 16) + 'px';
-      cta.style.left = (vv.offsetLeft + vv.width - 72 - 16) + 'px';
+      cta.style.top = (vv.offsetTop + vv.height - realSize - margin * s) + 'px';
+      cta.style.left = (vv.offsetLeft + vv.width - realSize - margin * s) + 'px';
+      cta.style.transform = 'scale(' + s + ')';
+      cta.style.transformOrigin = 'top left';
     }
     visualViewport.addEventListener('resize', repositionCta);
     visualViewport.addEventListener('scroll', repositionCta);
