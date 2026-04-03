@@ -323,9 +323,9 @@ const ALLERGEN_ICONS = {
   /* ── LEYENDA ALÉRGENOS ── */
   .allergen-legend {
     display: flex; align-items: center; justify-content: center; gap: .4rem;
-    font-family: 'Cormorant Garamond', serif; font-size: .85rem;
-    color: var(--muted); letter-spacing: .02em; font-weight: 300;
-    margin-bottom: 1.5rem; opacity: .6;
+    font-family: 'Cormorant Garamond', serif; font-size: 1rem;
+    color: rgba(196,167,108,.7); letter-spacing: .03em; font-weight: 300;
+    margin-bottom: 1.5rem;
   }
 
   /* ── FOOTER ── */
@@ -346,8 +346,8 @@ const ALLERGEN_ICONS = {
     color: var(--muted); letter-spacing: .03em; font-weight: 300;
   }
   .info-item svg { opacity: .5; flex-shrink: 0 }
-  .info-highlight { color: var(--gold); font-weight: 400 }
-  .info-highlight svg { opacity: .8 }
+  .info-highlight { color: rgba(196,167,108,.7); font-weight: 300 }
+  .info-highlight svg { opacity: .6 }
 
   /* ── CTA PEDIDO — touch-friendly ── */
   .order-cta {
@@ -612,7 +612,7 @@ const ALLERGEN_ICONS = {
   /* Footer */
   const footerEl = document.getElementById('footer-container');
   footerEl.innerHTML = `
-    <div class="allergen-legend">
+    <div class="allergen-legend info-highlight">
       \ud83e\udd90 \ud83c\udf3e = contiene al\u00e9rgeno
     </div>
     <div class="footer-divider"></div>
