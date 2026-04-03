@@ -12,48 +12,6 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500&family=Raleway:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
 
-<!--
-╔══════════════════════════════════════════════════════════════╗
-║  HSP — ARROCERÍA & CATERING — CARTA / MENÚ                  ║
-║                                                              ║
-║  MOBILE-FIRST (90%+ tráfico móvil)                          ║
-║                                                              ║
-║  EDITADO POR IA — GUÍA DE ESTRUCTURA                        ║
-║                                                              ║
-║  1. CONFIGURACIÓN ......... <script id="site-config">        ║
-║     → Contactos, Instagram, textos, reglas de negocio        ║
-║     → Carta completa (secciones + platos) en JSON            ║
-║                                                              ║
-║  2. ESTILOS ............... <style>                           ║
-║     → Mobile-first: base = móvil, @media (min-width) = desk  ║
-║     → Paleta de colores (variables CSS)                      ║
-║                                                              ║
-║  3. ESTRUCTURA HTML ....... <body>                            ║
-║     → Se renderiza automáticamente desde CONFIG               ║
-║     → NO editar el HTML de platos manualmente                ║
-║                                                              ║
-║  DECISIONES MOBILE-FIRST:                                    ║
-║  · Header compacto — el menú se ve sin scroll excesivo       ║
-║  · Sin animaciones de entrada (evita "parpadeo" en móvil)    ║
-║  · Sin hover effects (no existen en táctil)                  ║
-║  · Touch targets mínimo 44px (accesibilidad Apple/Google)    ║
-║  · Fuentes mínimo ~14px equiv para legibilidad               ║
-║  · Letter-spacing reducido en móvil (ahorra espacio)         ║
-║  · CTA WhatsApp sticky siempre visible                       ║
-║  · Octopus SVG oculto en pantallas < 600px                   ║
-║                                                              ║
-║  REGLAS DE NEGOCIO:                                          ║
-║  · Mínimo 8 comensales en delivery, 20 en showcooking      ║
-║  · Máximo 3 badges "new" a la vez (para que destaquen)       ║
-║  · Las secciones se renderizan en orden del array             ║
-║  · Badges permitidos: "esp" (Especialidad), "new" (Novedad)  ║
-║  · Alérgenos: indicar array por plato (se muestran iconos)   ║
-║     Valores: gluten, crustaceos, moluscos, pescado,          ║
-║     huevo, lacteos, soja, frutos_secos, apio, mostaza,       ║
-║     sesamo, sulfitos, altramuces, cacahuetes                 ║
-╚══════════════════════════════════════════════════════════════╝
--->
-
 <!-- ═══════════════════════════════════════════ -->
 <!-- 1. CONFIGURACIÓN — EDITAR AQUÍ             -->
 <!-- ═══════════════════════════════════════════ -->
@@ -87,42 +45,36 @@ const CONFIG = {
           desc: "con espárragos trigueros o setas shiitake y judías verdes",
           badge: "esp",
           allergens: [],
-          price: "15€",
         },
         {
           name: "Paella Valenciana",
           desc: "elaborada según la receta tradicional",
           badge: null,
           allergens: [],
-          price: "15€",
         },
         {
           name: "Arroz de Confit de Pato",
           desc: "confit de pato desmenuzado y puerro",
           badge: "new",
           allergens: [],
-          price: "16€",
         },
         {
           name: "Arroz de Chistorra y Pimientos de Padrón",
           desc: "con el equilibrio característico de la chistorra y el pimiento",
           badge: null,
           allergens: [],
-          price: "15€",
         },
         {
           name: "Arroz al Pedro Ximénez",
           desc: "con pollo y pimiento rojo, con un ligero toque dulce",
           badge: "new",
           allergens: ["sulfitos"],
-          price: "16€",
         },
         {
           name: "Arroz de Butifarra Blanca",
           desc: "con setas y ajos tiernos",
           badge: "new",
           allergens: [],
-          price: "15€",
         },
       ],
     },
@@ -134,28 +86,24 @@ const CONFIG = {
           desc: "con calamar y gambas, terminado con ajo y perejil",
           badge: null,
           allergens: ["crustaceos", "moluscos"],
-          price: "15€",
         },
         {
           name: "Arroz Negro",
           desc: "con sepia y gambones, ligado con su tinta",
           badge: null,
           allergens: ["moluscos", "crustaceos"],
-          price: "15€",
         },
         {
           name: "Arroz de Pulpo con Alcachofa",
           desc: "pulpo y alcachofa en una combinación equilibrada",
           badge: null,
           allergens: ["moluscos"],
-          price: "17€",
         },
         {
           name: "Fideuá de Gambones",
           desc: "con fideo fino y gambones",
           badge: null,
           allergens: ["gluten", "crustaceos"],
-          price: "15€",
         },
       ],
     },
@@ -291,16 +239,6 @@ const ALLERGEN_ICONS = {
   .dish-allergens {
     display: inline-flex; gap: .3rem; margin-left: .4rem;
     font-size: .8rem; vertical-align: middle;
-  }
-
-  /* ── PRECIO ── */
-  .dish-price {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: .95rem; font-weight: 400;
-    color: var(--gold); white-space: nowrap;
-    letter-spacing: .03em;
-    flex-shrink: 0;
-    padding-top: .1rem;
   }
 
   /* ── BADGES — legibles en móvil ── */
@@ -578,7 +516,7 @@ const ALLERGEN_ICONS = {
   document.getElementById('brand-name').textContent = C.brand.name;
   document.getElementById('brand-subtitle').textContent = C.brand.subtitle;
 
-  /* Menu */
+  /* Menu — SIN PRECIOS */
   const menuEl = document.getElementById('menu-container');
   C.carta.forEach(sec => {
     const sectionEl = document.createElement('div');
@@ -595,21 +533,19 @@ const ALLERGEN_ICONS = {
             `<span title="${a}">${ALLERGEN_ICONS[a] || '\u26a0\ufe0f'}</span>`
           ).join('')}</span>`
         : '';
-      const priceHtml = d.price ? `<span class="dish-price">${d.price}</span>` : '';
       html += `
         <div class="dish">
           <span class="dish-name">
             ${d.name} ${badgeHtml} ${allergenHtml}
             <span class="dish-desc">${d.desc}</span>
           </span>
-          ${priceHtml}
         </div>`;
     });
     sectionEl.innerHTML = html;
     menuEl.appendChild(sectionEl);
   });
 
-  /* Footer */
+  /* Footer — SIN DISCLAIMER DE PRECIOS */
   const footerEl = document.getElementById('footer-container');
   footerEl.innerHTML = `
     <div class="allergen-legend info-highlight">
@@ -617,10 +553,6 @@ const ALLERGEN_ICONS = {
     </div>
     <div class="footer-divider"></div>
     <div class="info-grid">
-      <div class="info-item info-highlight">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" rx="2" ry="2" width="22" height="16"/><circle cx="12" cy="12" r="4"/><line x1="1" y1="10" x2="4" y2="10"/><line x1="20" y1="10" x2="23" y2="10"/><line x1="1" y1="14" x2="4" y2="14"/><line x1="20" y1="14" x2="23" y2="14"/></svg>
-        Precios sin servicio: delivery +1\u20ac (seg\u00fan zona), showcooking +2\u20ac
-      </div>
       <div class="info-item info-highlight">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
         Delivery a partir de ${C.info.minDelivery} comensales
